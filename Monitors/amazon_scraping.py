@@ -25,9 +25,9 @@ def get_product_title(soup):
 def check_availability(soup):
     available = soup.find(id='availability')
     available_text = available.find('span', class_="a-size-medium").contents[0].lower()
-    if "in stock" in available_text:
-        return True
-    return False
+    if "no disponible" in available_text or "unavailable" in available_text:
+        return False
+    return True
 
 
 def get_image_url(soup):
