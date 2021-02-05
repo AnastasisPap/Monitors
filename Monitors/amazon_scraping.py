@@ -4,6 +4,7 @@ from read_csv import get_info
 from send_webhook import send_webhook
 from time import sleep
 from fake_headers import Headers
+from write_to_logs import append_to_logs
 
 
 def get_headers():
@@ -14,6 +15,7 @@ def get_content(url, headers):
     try:
         res = requests.get(url, headers=headers)
         if res.status_code != 200:
+            append_to_logs(f"Error, status code: {status_code}\n")
             print(f"Got status code: {res.status_code}")
             while res.status_code == 503:
                 print("Header banned")
@@ -54,6 +56,7 @@ def main(url):
             soup = BeautifulSoup(res.content, 'html.parser')
             isAvailable = check_availability(soup)
             productTitle = get_product_title(soup)
+            append_to_logs("Checking availability\n")
             if isAvailable:
                 image_url = get_image_url(soup)
                 send_webhook(url, 'Item in stock', productTitle, image_url)
