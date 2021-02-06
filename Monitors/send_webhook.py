@@ -1,14 +1,16 @@
 import requests
+from datetime import datetime
 
 
 def send_webhook(_url, embed_title, description, embed_image):
     webhook_url = 'https://discord.com/api/webhooks/807177309828284427/Sx3vfY5_WQcot2bNYO2QrOYC9KZdMLlavC9xRRX43hgeleRR0ZrvexsgLOSHOradNNKd'
+    current_time = datetime.now().strftime("%H:%M:%S")
     data = {"username": "Bob the builder", "embeds": [
         {
             "title": embed_title,
             "description": f'[{description}]({_url})',
             "color": 1127128,
-            "footer": {"text": "OFF Monitors", "icon_url": "https://i.imgur.com/fKL31aD.jpg"},
+            "footer": {"text": f"onlyFNF [{current_time}]", "icon_url": "https://i.imgur.com/fKL31aD.jpg"},
             "thumbnail": {"url": embed_image},
         }
     ]}

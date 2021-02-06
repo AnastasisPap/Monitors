@@ -4,7 +4,16 @@ from read_csv import get_info
 from send_webhook import send_webhook
 from time import sleep
 from fake_headers import Headers
-from write_to_logs import append_to_logs
+from datetime import datetime
+import os
+
+def get_time():
+    return datetime.now().strftime("%H:%M:%S")
+
+
+def append_to_logs(message):
+    with open('logs.txt', 'a') as logs:
+        logs.write(message)
 
 
 def get_headers():
@@ -15,7 +24,7 @@ def get_content(url, headers):
     try:
         res = requests.get(url, headers=headers)
         if res.status_code != 200:
-            append_to_logs(f"Error, status code: {status_code}\n")
+            append_to_logs(f"Error, status code: {res.status_code} | {get_time()}\n")
             print(f"Got status code: {res.status_code}")
             while res.status_code == 503:
                 print("Header banned")
@@ -31,7 +40,7 @@ def get_product_title(soup):
         title = soup.find(id='productTitle')
         return title.text.strip('\n')
     except:
-        append_to_logs("Error finding product title html code:\n")
+        append_to_logs(f"Error finding product title html code | {get_time()}\n")
         append_to_logs(soup.prettify())
 
 
@@ -39,17 +48,17 @@ def check_availability(soup):
     try:
         available = soup.find(id='availability')
         try:
-           available_text = available.find('span', class_="a-size-medium").contents[0].lower()
-           kws = ["no disponible", "unavailable", "nicht"]
-           for kw in kws:
+            available_text = available.find('span', class_="a-size-medium").contents[0].lower()
+            kws = ["no disponible", "unavailable", "nicht"]
+            for kw in kws:
                 if kw in available_text:
                     return False
-           return True
+            return True
         except:
-            append_to_logs("Error finding availability text, script:\n")
+            append_to_logs(f"Error finding availability text, script {get_time()}\n")
             append_to_logs(available.prettify())
     except:
-        append_to_logs("Error finding availability, script:\n")
+        append_to_logs(f"Error finding availability, script {get_time()}\n")
         append_to_logs(soup.prettify())
 
 
@@ -60,20 +69,24 @@ def get_image_url(soup):
         url = image['data-old-hires']
         return url
     except:
-        append_to_logs("Error finding image, script:\n")
+        append_to_logs(f"Error finding image, script {get_time()}\n")
         append_to_logs(soup.prettify())
 
 
 def main(url):
+    if "logs.txt" in os.listdir():
+        os.remove("logs.txt")
     while True:
-        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15'}
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15'}
         res = get_content(url, headers)
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
             isAvailable = check_availability(soup)
             productTitle = get_product_title(soup)
-            append_to_logs("Checking availability\n")
+            append_to_logs(f"Checking availability {get_time()}\n")
             if isAvailable:
+                append_to_logs(f"Found item in stock check discord {get_time()}\n")
                 image_url = get_image_url(soup)
                 send_webhook(url, 'Item in stock', productTitle, image_url)
         sleep(3)
@@ -82,4 +95,3 @@ def main(url):
 if __name__ == '__main__':
     websites = get_info()
     main(websites[0]['url'])
-
