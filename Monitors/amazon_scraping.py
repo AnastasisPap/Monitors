@@ -41,13 +41,13 @@ def check_availability(soup):
         try:
            available_text = available.find('span', class_="a-size-medium").contents[0].lower()
            kws = ["no disponible", "unavailable", "nicht"]
-            or kw in kws:
-                f kw in available_text:
-                    eturn False
+           for kw in kws:
+                if kw in available_text:
+                    return False
            return True
-       except:
-           append_to_logs("Error finding availability text, script:\n")
-           append_to_logs(available.prettify())
+        except:
+            append_to_logs("Error finding availability text, script:\n")
+            append_to_logs(available.prettify())
     except:
         append_to_logs("Error finding availability, script:\n")
         append_to_logs(soup.prettify())
@@ -55,7 +55,7 @@ def check_availability(soup):
 
 def get_image_url(soup):
     try:
-        main_product = soup.find('li',a class_='itemNo0')
+        main_product = soup.find('li', class_='itemNo0')
         image = main_product.find('img')
         url = image['data-old-hires']
         return url
