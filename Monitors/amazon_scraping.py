@@ -7,6 +7,30 @@ from fake_headers import Headers
 from datetime import datetime
 import os
 
+
+def get_new_url(url):
+    id = url.split('dp/')[1]
+    new_url = f'https://www.amazon.co.uk/gp/aod/ajax/ref=dp_aod_afts?asin={id}&m=&pinnedofferhash'
+    return new_url
+
+
+# def get_price(soup):
+#     try:
+#         offers = soup.find_all(id='aod-offer')
+#         i = 0
+#         for offer in offers:
+#             condition = offer.find(id='aod-offer-heading').contents[1].lower()
+#             if 'used' in condition:
+#                 continue
+#             else:
+#                 price_div = offer.find(id=f'aod-price-{i+1}')
+#                 price_span = price_div.find('span', class_='a-offscreen')
+#                 print(price_span.text)
+#     except:
+#         append_to_logs(f'Error finding offer list | {get_time()}\n')
+#         append_to_logs(soup.prettify())
+
+
 def get_time():
     return datetime.now().strftime("%H:%M:%S")
 
@@ -37,7 +61,7 @@ def get_content(url, headers):
 
 def get_product_title(soup):
     try:
-        title = soup.find(id='productTitle')
+        title = soup.find(id='aod-asin-title-text')
         return title.text.strip('\n')
     except:
         append_to_logs(f"Error finding product title html code | {get_time()}\n")
@@ -45,28 +69,20 @@ def get_product_title(soup):
 
 
 def check_availability(soup):
+    new_soup = soup.find(id='aod-offer-list')
     try:
-        available = soup.find(id='availability')
-        try:
-            available_text = available.find('span', class_="a-size-medium").contents[0].lower()
-            kws = ["no disponible", "unavailable", "nicht"]
-            for kw in kws:
-                if kw in available_text:
-                    return False
+        available = new_soup.find(id='aod-total-offer-count')['value']
+        if int(available) > 0:
             return True
-        except:
-            append_to_logs(f"Error finding availability text, script {get_time()}\n")
-            append_to_logs(available.prettify())
+        return False
     except:
         append_to_logs(f"Error finding availability, script {get_time()}\n")
-        append_to_logs(soup.prettify())
+        append_to_logs(new_soup.prettify())
 
 
 def get_image_url(soup):
     try:
-        main_product = soup.find('li', class_='itemNo0')
-        image = main_product.find('img')
-        url = image['data-old-hires']
+        url = soup.find(id='aod-asin-image-id')['src']
         return url
     except:
         append_to_logs(f"Error finding image, script {get_time()}\n")
@@ -74,6 +90,7 @@ def get_image_url(soup):
 
 
 def main(url):
+    url = get_new_url(url)
     prevAvailable = True
     if "logs.txt" in os.listdir():
         os.remove("logs.txt")
@@ -89,6 +106,7 @@ def main(url):
             productTitle = get_product_title(soup)
             append_to_logs(f"Checking availability {get_time()}\n")
             if isAvailable and prevAvailable:
+                # lowest_price = get_price(soup)
                 prevAvailable = False
                 append_to_logs(f"Found item in stock check discord {get_time()}\n")
                 image_url = get_image_url(soup)
