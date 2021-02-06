@@ -27,25 +27,41 @@ def get_content(url, headers):
 
 
 def get_product_title(soup):
-    title = soup.find(id='productTitle')
-    return title.text.strip('\n')
+    try:
+        title = soup.find(id='productTitle')
+        return title.text.strip('\n')
+    except:
+        append_to_logs("Error finding product title html code:\n")
+        append_to_logs(soup.prettify())
 
 
 def check_availability(soup):
-    available = soup.find(id='availability')
-    available_text = available.find('span', class_="a-size-medium").contents[0].lower()
-    kws = ["no disponible", "unavailable", "nicht"]
-    for kw in kws:
-        if kw in available_text:
-            return False
-    return True
+    try:
+        available = soup.find(id='availability')
+        try:
+           available_text = available.find('span', class_="a-size-medium").contents[0].lower()
+           kws = ["no disponible", "unavailable", "nicht"]
+            or kw in kws:
+                f kw in available_text:
+                    eturn False
+           return True
+       except:
+           append_to_logs("Error finding availability text, script:\n")
+           append_to_logs(available.prettify())
+    except:
+        append_to_logs("Error finding availability, script:\n")
+        append_to_logs(soup.prettify())
 
 
 def get_image_url(soup):
-    main_product = soup.find('li', class_='itemNo0')
-    image = main_product.find('img')
-    url = image['data-old-hires']
-    return url
+    try:
+        main_product = soup.find('li',a class_='itemNo0')
+        image = main_product.find('img')
+        url = image['data-old-hires']
+        return url
+    except:
+        append_to_logs("Error finding image, script:\n")
+        append_to_logs(soup.prettify())
 
 
 def main(url):
