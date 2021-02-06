@@ -74,6 +74,7 @@ def get_image_url(soup):
 
 
 def main(url):
+    prevAvailable = True
     if "logs.txt" in os.listdir():
         os.remove("logs.txt")
     while True:
@@ -83,9 +84,12 @@ def main(url):
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
             isAvailable = check_availability(soup)
+            if not isAvailable:
+                prevAvailable = False
             productTitle = get_product_title(soup)
             append_to_logs(f"Checking availability {get_time()}\n")
-            if isAvailable:
+            if isAvailable and prevAvailable:
+                prevAvailable = False
                 append_to_logs(f"Found item in stock check discord {get_time()}\n")
                 image_url = get_image_url(soup)
                 send_webhook(url, 'Item in stock', productTitle, image_url)
