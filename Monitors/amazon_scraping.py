@@ -10,7 +10,8 @@ import os
 
 def get_new_url(url):
     id = url.split('dp/')[1]
-    new_url = f'https://www.amazon.co.uk/gp/aod/ajax/ref=dp_aod_afts?asin={id}&m=&pinnedofferhash'
+    region = url.split('amazon.')[1].split('/')[0]
+    new_url = f'https://www.amazon.{region}/gp/aod/ajax/ref=dp_aod_afts?asin={id}&m=&pinnedofferhash'
     return new_url
 
 
