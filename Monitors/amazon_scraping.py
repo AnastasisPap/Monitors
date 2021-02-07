@@ -9,10 +9,10 @@ import os
 
 
 def get_new_url(url):
-    id = url.split('dp/')[1]
+    sku = url.split('dp/')[1]
     region = url.split('amazon.')[1].split('/')[0]
-    new_url = f'https://www.amazon.{region}/gp/aod/ajax/ref=dp_aod_afts?asin={id}&m=&pinnedofferhash'
-    return new_url
+    new_url = f'https://www.amazon.{region}/gp/aod/ajax/ref=dp_aod_afts?asin={sku}&m=&pinnedofferhash'
+    return new_url, sku
 
 
 def get_price(soup):
@@ -94,7 +94,7 @@ def get_image_url(soup):
 
 
 def main(url, retail):
-    new_url = get_new_url(url)
+    new_url, sku = get_new_url(url)
     hasSent = False
     if "logs.txt" in os.listdir():
         os.remove("logs.txt")
@@ -117,7 +117,7 @@ def main(url, retail):
                     hasSent = True
                     image_url = get_image_url(soup)
                     append_to_logs(f"Found item in stock check discord {get_time()}\n")
-                    send_webhook(url, 'Item in stock', productTitle, image_url, lowest_price)
+                    send_webhook(url, 'Item in stock', productTitle, image_url, lowest_price, sku)
         sleep(3)
 
 

@@ -2,7 +2,7 @@ import requests
 from datetime import datetime
 
 
-def send_webhook(_url, embed_title, description, embed_image, lowest_price):
+def send_webhook(_url, embed_title, description, embed_image, lowest_price, sku):
     webhook_url = 'https://discord.com/api/webhooks/807177309828284427/Sx3vfY5_WQcot2bNYO2QrOYC9KZdMLlavC9xRRX43hgeleRR0ZrvexsgLOSHOradNNKd'
     current_time = datetime.now().strftime("%H:%M:%S")
     data = {"username": "Bob the builder", "embeds": [
@@ -11,7 +11,7 @@ def send_webhook(_url, embed_title, description, embed_image, lowest_price):
             "description": f'[{description}]({_url})',
             "color": 1127128,
             "footer": {"text": f"onlyFNF [{current_time}]", "icon_url": "https://i.imgur.com/fKL31aD.jpg"},
-            "fields": [{"name": "Price", "value": lowest_price}],
+            "fields": [{"name": "Price", "value": lowest_price, "inline": True}, {"name": "SKU", "value": sku, "inline": True}],
             "thumbnail": {"url": embed_image},
         }
     ]}
