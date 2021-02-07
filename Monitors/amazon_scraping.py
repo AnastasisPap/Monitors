@@ -14,21 +14,24 @@ def get_new_url(url):
     return new_url
 
 
-# def get_price(soup):
-#     try:
-#         offers = soup.find_all(id='aod-offer')
-#         i = 0
-#         for offer in offers:
-#             condition = offer.find(id='aod-offer-heading').contents[1].lower()
-#             if 'used' in condition:
-#                 continue
-#             else:
-#                 price_div = offer.find(id=f'aod-price-{i+1}')
-#                 price_span = price_div.find('span', class_='a-offscreen')
-#                 print(price_span.text)
-#     except:
-#         append_to_logs(f'Error finding offer list | {get_time()}\n')
-#         append_to_logs(soup.prettify())
+def get_price(soup):
+    try:
+        offer_list = soup.find_all('div', class_='a-section a-spacing-medium a-spacing-top-base a-padding-none aod-information-block aod-clear-float')
+        for i, offer in enumerate(offer_list):
+            condition_div = offer.find(id='aod-offer-heading').text.lower()
+            if 'used' not in condition_div:
+                price = soup.find(id=f'aod-price-{i+1}').find('span', class_='a-offscreen').text
+                if '£' in price or '$' in price:
+                    float_price = float(price[1:])
+                elif '€' in price:
+                    float_price = float(price.split(',')[0])
+
+                return price, float_price
+            continue
+        return 10**10, 10**10
+    except:
+        append_to_logs(f'Error finding offer list | {get_time()}\n')
+        append_to_logs(soup.prettify())
 
 
 def get_time():
@@ -89,9 +92,9 @@ def get_image_url(soup):
         append_to_logs(soup.prettify())
 
 
-def main(url):
+def main(url, retail):
     new_url = get_new_url(url)
-    prevAvailable = True
+    hasSent = False
     if "logs.txt" in os.listdir():
         os.remove("logs.txt")
     while True:
@@ -101,19 +104,22 @@ def main(url):
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
             isAvailable = check_availability(soup)
-            if not isAvailable:
-                prevAvailable = False
-            productTitle = get_product_title(soup)
             append_to_logs(f"Checking availability {get_time()}\n")
-            if isAvailable and prevAvailable:
-                # lowest_price = get_price(soup)
-                prevAvailable = False
-                append_to_logs(f"Found item in stock check discord {get_time()}\n")
-                image_url = get_image_url(soup)
-                send_webhook(url, 'Item in stock', productTitle, image_url)
+            if not isAvailable and hasSent:
+                hasSent = False
+
+            if isAvailable and not hasSent:
+                append_to_logs("Found item in stock")
+                productTitle = get_product_title(soup)
+                lowest_price, float_price = get_price(soup)
+                if float_price < retail:
+                    hasSent = True
+                    image_url = get_image_url(soup)
+                    append_to_logs(f"Found item in stock check discord {get_time()}\n")
+                    send_webhook(url, 'Item in stock', productTitle, image_url, lowest_price)
         sleep(3)
 
 
 if __name__ == '__main__':
     websites = get_info()
-    main(websites[0]['url'])
+    main(websites[0]['url'], int(websites[0]['retail']))
