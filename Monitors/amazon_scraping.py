@@ -44,10 +44,6 @@ def append_to_logs(message):
         logs.write(message)
 
 
-def get_headers():
-    return Headers(os="mac", headers=True).generate()
-
-
 def get_content(url, headers):
     try:
         res = requests.get(url, headers=headers)
@@ -55,8 +51,9 @@ def get_content(url, headers):
             append_to_logs(f"Error, status code: {res.status_code} | {get_time()}\n")
             print(f"Got status code: {res.status_code}")
             while res.status_code == 503:
-                print("Header banned")
-                get_content(url, get_headers())
+                append_to_logs("Header banned")
+                new_header = Headers(os='mac', headers=True).generate()
+                get_content(url, new_header)
         else:
             return res
     except:

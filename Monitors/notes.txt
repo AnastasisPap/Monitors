@@ -1,0 +1,10 @@
+Started Monitor at:
+11:08:30
+
+Got error 503 at 02:21:00
+Got error 204 at 02:21:01
+continues
+
+Header got banned in approximately 15 hours with 3s delay.
+
+Need to see if the header will get unbanned after some time
