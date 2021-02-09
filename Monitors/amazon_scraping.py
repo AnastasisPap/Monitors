@@ -1,11 +1,10 @@
-import requests
 from bs4 import BeautifulSoup
 from read_csv import get_info
 from send_webhook import send_webhook
 from time import sleep
-from fake_headers import Headers
-from datetime import datetime
+from global_functions import *
 import os
+file_name = 'amazon_logs.txt'
 
 
 def get_new_url(url):
@@ -31,33 +30,8 @@ def get_price(soup):
             continue
         return 10**10, 10**10
     except:
-        append_to_logs(f'Error finding offer list | {get_time()}\n')
-        append_to_logs(soup.prettify())
-
-
-def get_time():
-    return datetime.now().strftime("%H:%M:%S")
-
-
-def append_to_logs(message):
-    with open('logs.txt', 'a') as logs:
-        logs.write(message)
-
-
-def get_content(url, headers):
-    try:
-        res = requests.get(url, headers=headers)
-        if res.status_code != 200:
-            append_to_logs(f"Error, status code: {res.status_code} | {get_time()}\n")
-            print(f"Got status code: {res.status_code}")
-            while res.status_code == 503:
-                append_to_logs("Header banned")
-                new_header = Headers(os='mac', headers=True).generate()
-                get_content(url, new_header)
-        else:
-            return res
-    except:
-        print(f"URL not found: {url}")
+        append_to_logs(file_name, f'Error finding offer list | {get_time()}\n')
+        append_to_logs(file_name, soup.prettify())
 
 
 def get_product_title(soup):
@@ -65,8 +39,8 @@ def get_product_title(soup):
         title = soup.find(id='aod-asin-title-text')
         return title.text.strip('\n')
     except:
-        append_to_logs(f"Error finding product title html code | {get_time()}\n")
-        append_to_logs(soup.prettify())
+        append_to_logs(file_name, f"Error finding product title html code | {get_time()}\n")
+        append_to_logs(file_name, soup.prettify())
 
 
 def check_availability(soup):
@@ -77,8 +51,8 @@ def check_availability(soup):
             return True
         return False
     except:
-        append_to_logs(f"Error finding availability, script {get_time()}\n")
-        append_to_logs(new_soup.prettify())
+        append_to_logs(file_name, f"Error finding availability, script {get_time()}\n")
+        append_to_logs(file_name, new_soup.prettify())
 
 
 def get_image_url(soup):
@@ -86,35 +60,35 @@ def get_image_url(soup):
         url = soup.find(id='aod-asin-image-id')['src']
         return url
     except:
-        append_to_logs(f"Error finding image, script {get_time()}\n")
-        append_to_logs(soup.prettify())
+        append_to_logs(file_name, f"Error finding image, script {get_time()}\n")
+        append_to_logs(file_name, soup.prettify())
 
 
 def main(url, retail):
     new_url, sku = get_new_url(url)
     hasSent = False
-    if "logs.txt" in os.listdir():
-        os.remove("logs.txt")
+    if file_name in os.listdir():
+        os.remove(file_name)
     while True:
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15'}
-        res = get_content(new_url, headers)
+        res = get_content(new_url, headers, file_name)
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
             isAvailable = check_availability(soup)
-            append_to_logs(f"Checking availability {get_time()}\n")
+            append_to_logs(file_name, f"Checking availability {get_time()}\n")
             if not isAvailable and hasSent:
                 hasSent = False
 
             if isAvailable and not hasSent:
-                append_to_logs("Found item in stock")
+                append_to_logs(file_name, "Found item in stock")
                 productTitle = get_product_title(soup)
                 lowest_price, float_price = get_price(soup)
                 if float_price < retail:
                     hasSent = True
                     image_url = get_image_url(soup)
-                    append_to_logs(f"Found item in stock check discord {get_time()}\n")
-                    send_webhook(url, 'Item in stock', productTitle, image_url, lowest_price, sku)
+                    append_to_logs(file_name, f"Found item in stock check discord {get_time()}\n")
+                    send_webhook(url, 'Amazon: item in stock', productTitle, image_url, lowest_price, sku)
         sleep(3)
 
 
