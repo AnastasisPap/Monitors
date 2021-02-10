@@ -4,7 +4,7 @@ from send_webhook import send_webhook
 from time import sleep
 from global_functions import *
 import os
-file_name = 'smyths_logs.txt'
+file_name = 'smyths_digital_logs.txt'
 
 
 def get_product_title(soup):
@@ -77,5 +77,5 @@ def main(url):
 
 if __name__ == '__main__':
     websites = get_info()[0]
-    _url = websites['smyths_console_url']
+    _url = websites['smyths_digital_url']
     main(_url)

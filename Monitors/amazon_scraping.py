@@ -69,6 +69,9 @@ def main(url, retail):
     hasSent = False
     if file_name in os.listdir():
         os.remove(file_name)
+    
+    append_to_logs(file_name, f'Monitor started {get_time()}\n')
+
     while True:
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15'}
@@ -94,5 +97,5 @@ def main(url, retail):
 if __name__ == '__main__':
     websites = get_info()[0]
     _url = websites['amazon_url']
-    retail = int(websites['retail'])
+    retail = int(websites['amazon_retail'])
     main(_url, retail)

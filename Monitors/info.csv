@@ -1,2 +1,2 @@
-amazon_url,retail,smyths_url,currys_url,keyword
-https://www.amazon.co.uk/dp/B08H95HBZ8,100,https://www.smythstoys.com/uk/en-gb/video-games-and-tablets/playstation-5/playstation-5-games/sackboy-a-big-adventure-ps5/p/191447,https://www.currys.co.uk/gbuk/sony-gaming/console-gaming/console-gaming/consoles/634_4783_32541_49_xx/xx-criteria.html,playstation 5
+amazon_url,amazon_retail,smyths_console_url,smyths_digital_url,currys_url,keyword
+https://www.amazon.co.uk/dp/B08H95Y452,600,https://www.smythstoys.com/uk/en-gb/video-games-and-tablets/playstation-5/playstation-5-consoles/playstation-5-console/p/191259,https://www.smythstoys.com/uk/en-gb/video-games-and-tablets/playstation-5/playstation-5-consoles/playstation-5-digital-edition-console/p/191430,https://www.currys.co.uk/gbuk/sony-gaming/console-gaming/consoles/634_4783_32541_49_xx/xx-criteria.html,playstation 5
