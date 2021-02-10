@@ -76,7 +76,6 @@ def main(url, retail):
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
             isAvailable = check_availability(soup)
-            append_to_logs(file_name, f"Checking availability {get_time()}\n")
             if not isAvailable and hasSent:
                 hasSent = False
 
@@ -89,7 +88,7 @@ def main(url, retail):
                     image_url = get_image_url(soup)
                     append_to_logs(file_name, f"Found item in stock check discord {get_time()}\n")
                     send_webhook(url, 'Amazon: item in stock', productTitle, image_url, lowest_price, sku)
-        sleep(3)
+        sleep(2)
 
 
 if __name__ == '__main__':

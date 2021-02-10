@@ -59,7 +59,6 @@ def main(url):
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
             isAvailable = check_availability(soup)
-            append_to_logs(file_name, f"Checking availability {get_time()}\n")
             if not isAvailable and hasSent:
                 hasSent = False
 
@@ -70,7 +69,7 @@ def main(url):
                 price = get_price(soup)
                 title = get_product_title(soup)
                 sku = url.split('/')[-1]
-                send_webhook(url, ' Smyths Toys: item in stock', title, image_url, price, sku)
+                send_webhook(url, 'Smyths Toys: item in stock', title, image_url, price, sku)
 
         sleep(2)
 

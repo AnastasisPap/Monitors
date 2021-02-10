@@ -1,3 +1,7 @@
 .idea
 __pycache__
 TestWebsite
+nohup.out
+currys_logs.txt
+amazon_logs.txt
+smyths_logs.txt
