@@ -92,5 +92,7 @@ def main(url, retail):
 
 
 if __name__ == '__main__':
-    websites = get_info()
-    main(websites[0]['url'], int(websites[0]['retail']))
+    websites = get_info()[0]
+    _url = websites['amazon_url']
+    retail = int(websites['retail'])
+    main(_url, retail)

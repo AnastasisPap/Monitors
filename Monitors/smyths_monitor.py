@@ -75,6 +75,6 @@ def main(url):
 
 
 if __name__ == '__main__':
-    # websites = get_info()
-    # main(websites[0]['url'])
-    main('https://www.smythstoys.com/uk/en-gb/video-games-and-tablets/playstation-5/playstation-5-games/sackboy-a-big-adventure-ps5/p/191447')
+    websites = get_info()[0]
+    _url = websites['smyths_url']
+    main(_url)

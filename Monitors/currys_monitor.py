@@ -91,6 +91,7 @@ def main(url, keyword):
 
 
 if __name__ == '__main__':
-    _url = 'https://www.currys.co.uk/gbuk/sony-gaming/console-gaming/console-gaming/consoles/634_4783_32541_49_xx/xx-criteria.html'
-    keyword = 'playstation 5'
+    websites = get_info()[0]
+    _url = websites['currys_url']
+    keyword = websites['keyword']
     main(_url, keyword)
