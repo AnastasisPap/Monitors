@@ -16,7 +16,7 @@ def get_content(url, headers, file_name):
     try:
         res = requests.get(url, headers=headers)
         if res.status_code != 200:
-            append_to_logs(f"Error, status code: {res.status_code} | {get_time()}\n", file_name)
+            append_to_logs(file_name, f"Error, status code: {res.status_code} | {get_time()} | {url}\n")
             print(f"Got status code: {res.status_code}")
             while res.status_code == 503:
                 append_to_logs(file_name, "Header banned")
