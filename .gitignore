@@ -8,4 +8,8 @@ smyths_logs.txt
 argos_digital_logs.txt
 argos_console_logs.txt
 argos_logs.txt
+<<<<<<< HEAD
 game_logs.txt
+=======
+very_logs.txt
+>>>>>>> 4a5d6c24b82d179d6bd3f22895379f13b26cb73b
