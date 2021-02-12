@@ -55,8 +55,6 @@ def get_link(soup):
 
 def main(url, keyword):
     hasSent = False
-    if file_name in os.listdir():
-        os.remove(file_name)
 
     append_to_logs(file_name, f'Started monitor {get_time()}\n')
     while True:

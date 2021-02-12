@@ -1,10 +1,14 @@
 from datetime import datetime
 import requests
 from fake_headers import Headers
+import os
 
 
 def append_to_logs(file_name, message):
-    with open(file_name, 'a') as logs:
+    if 'logs' not in os.listdir():
+        os.mkdir('logs')
+    file_path = "./logs/" + file_name
+    with open(file_path, 'a') as logs:
         logs.write(message)
 
 

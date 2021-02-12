@@ -67,8 +67,6 @@ def get_image_url(soup):
 def main(url, retail):
     new_url, sku = get_new_url(url)
     hasSent = False
-    if file_name in os.listdir():
-        os.remove(file_name)
     
     append_to_logs(file_name, f'Monitor started {get_time()}\n')
 

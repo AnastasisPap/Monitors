@@ -42,8 +42,6 @@ def check_availability(url):
 def main(url):
     hasSent = False
     hasSentURL = False
-    if file_name in os.listdir():
-        os.remove(file_name)
     append_to_logs(file_name, f'Monitor started {get_time()}\n')
 
     while True:
