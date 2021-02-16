@@ -36,6 +36,7 @@ def get_url(product):
 
 def main(product_id):
     hasSent = False
+    append_to_logs(file_name, f"Started monitor {get_time()}\n")
     while True:
         s = requests.get("https://www.target.com/")
         key = s.cookies['visitorId']
@@ -48,7 +49,7 @@ def main(product_id):
             hasSent = False
 
         if isAvailable and not hasSent:
-            append_to_logs(file_name, 'Found item in stock\n')
+            append_to_logs(file_name, 'Found item in stock {get_time()}\n')
             hasSent = True
             title = get_title(product)
             price = get_price(product)
@@ -61,3 +62,4 @@ def main(product_id):
 
 if __name__ == '__main__':
     main(81114474)
+    

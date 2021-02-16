@@ -39,3 +39,7 @@ Monitor started 13:51:57
 Monitor started 13:52:05
 Monitor started 13:53:27
 Found item in stock
+Started monitor 21:38:23
+Started monitor 21:39:52
+Started monitor 21:40:27
+Found item in stock {get_time()}
