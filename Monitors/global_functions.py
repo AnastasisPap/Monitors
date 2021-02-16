@@ -19,11 +19,13 @@ def get_time():
 def get_content(url, headers, file_name):
     try:
         res = requests.get(url, headers=headers)
+        print(res.status_code)
         if res.status_code != 200:
+            print('ok')
             append_to_logs(file_name, f"Error, status code: {res.status_code} | {get_time()} | {url}\n")
-            print(f"Got status code: {res.status_code}")
             while res.status_code == 503:
                 append_to_logs(file_name, "Header banned")
+                print('generating new header')
                 new_header = Headers(os='mac', headers=True).generate()
                 get_content(url, new_header, file_name)
         else:
