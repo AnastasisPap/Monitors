@@ -3,15 +3,14 @@ from read_csv import get_info
 from send_webhook import send_webhook
 from time import sleep
 from global_functions import *
-import os
 file_name = 'very_logs.txt'
 
 
 def check_availability(products, keyword):
     for i, product in enumerate(products):
         try:
-            title = product.find('span', class_='productBrandDesc').text.replace("\n", "")
-            if keyword in title.lower():
+            title = product.find('span', class_='productBrandDesc').text.replace("\n", "").lower()
+            if keyword in title:
                 return i, True, title
         except:
             append_to_logs(file_name, f'Error finding product description {get_time()}\n')
@@ -77,9 +76,10 @@ def main(url, keyword):
             except:
                 append_to_logs(file_name, f'Error finding products {get_time()}\n')
                 append_to_logs(file_name, f'{soup}\n')
+        sleep(2)
 
 
 if __name__ == '__main__':
     websites = get_info()[0]
     _url = websites['very_url']
-    main(_url, 'console')
+    main(_url, 'playstation')

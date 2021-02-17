@@ -62,4 +62,3 @@ def main(product_id):
 
 if __name__ == '__main__':
     main(81114474)
-    
