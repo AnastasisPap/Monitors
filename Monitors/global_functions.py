@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 import requests
 from fake_headers import Headers
 import os
@@ -13,7 +13,7 @@ def append_to_logs(file_name, message):
 
 
 def get_time():
-    return datetime.now().strftime("%H:%M:%S")
+    return f'{str(datetime.today())}'
 
 
 def get_content(url, headers, file_name):
