@@ -72,7 +72,7 @@ def main(url, retail):
 
     while True:
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15'}
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/37.0.2062.94 Chrome/37.0.2062.94 Safari/537.36'}
         res = get_content(new_url, headers, file_name)
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')

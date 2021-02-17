@@ -9,7 +9,7 @@ file_name = 'very_logs.txt'
 def check_availability(soup):
     try:
         oos_text = soup.find('meta', {'property': 'product:availability'})["content"]
-        if oos_text == 'Out of stock':
+        if oos_text == 'Out of stock' or oos_text == 'preorder':
             return False
         return True
     except:
@@ -66,6 +66,7 @@ def main(url):
                 price = get_price(soup)
                 product_id = url.split('/')[-1].strip('.prd')
                 send_webhook(url, "Very: item in stock", title, image_url, price, product_id)
+                hasSent = True
 
         sleep(2)
 
