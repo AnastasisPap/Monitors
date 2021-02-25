@@ -34,7 +34,7 @@ def check_availability(soup):
         return True
     except:
         append_to_logs(file_name, f"Error finding availability, script {get_time()}\n")
-        append_to_logs(file_name, new_soup.prettify())
+        append_to_logs(file_name, soup.prettify())
 
 
 def get_price(soup):
@@ -53,9 +53,21 @@ def main(url):
     append_to_logs(file_name, f'Started monitor {get_time()}\n')
     while True:
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15'}
+            "Accept-Language": "en-US,en;q=0.9,el;q=0.8,la;q=0.7",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36",
+        }
+        import requests
+        res = requests.get(url, headers=headers)
+        sleep(2)
+        res = requests.get(url, headers=headers, cookies=res.cookies)
+        print(res.content)
         res = get_content(url, headers, file_name)
         if res:
+
+            for cookie in res.cookies:
+                print(cookie)
             soup = BeautifulSoup(res.content, 'html.parser')
             isAvailable = check_availability(soup)
             if not isAvailable and hasSent:
@@ -68,7 +80,7 @@ def main(url):
                 price = get_price(soup)
                 title = get_product_title(soup)
                 sku = url.split('/')[-1]
-                send_webhook(url, 'Smyths Toys: item in stock', title, image_url, price, sku)
+                # send_webhook(url, 'Smyths Toys: item in stock', title, image_url, price, sku)
 
         sleep(2)
 

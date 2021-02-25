@@ -34,6 +34,7 @@ def get_image_url(product_id):
     url = f'https://pisces.bbystatic.com/image2/BestBuy_US/images/products/{category_id}/{product_id}_sd.jpg;maxHeight=640;maxWidth=550'
     return url
 
+
 def main(product_id):
     hasSent = False
     append_to_logs(file_name, f'Started monitor {get_time()}\n')
@@ -56,6 +57,7 @@ def main(product_id):
             send_webhook(url, "Best buy: item in stock", title, image_url, price, product_id)
 
         sleep(2)
+
 
 if __name__ == '__main__':
     main(6426149)
