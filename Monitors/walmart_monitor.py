@@ -51,11 +51,12 @@ def main(url):
                    'User-Agent': 'Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36',
                    'Accept-Language': 'en-US;q=0.5,en;q=0.3', 'Cache-Control': 'max-age=0', 'DNT': '1',
                    'Pragma': 'no-cache'}
-        res = get_content(url, headers, file_name)
+        proxies = {'https': 'proxy.endproxies.com:31112'}
+        res = get_content(url, headers, file_name, proxies)
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
             isAvailable = check_availability(soup)
-
+            print(soup)
             if not isAvailable and hasSent:
                 hasSent = False
 

@@ -5,10 +5,10 @@ import json
 from global_functions import *
 file_name = 'best_buy_logs.txt'
 
-# get_title
+
 def check_availability(product):
     state = product["buttonState"]["buttonState"]
-    if state == "SOLD_OUT":
+    if state == "SOLD_OUT" or state == 'COMING_SOON':
         return False
     return True
 
@@ -60,4 +60,4 @@ def main(product_id):
 
 
 if __name__ == '__main__':
-    main(6426149)
+    main(6439402)
