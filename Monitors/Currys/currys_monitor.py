@@ -1,9 +1,7 @@
 from bs4 import BeautifulSoup
-from read_csv import get_info
-from send_webhook import send_webhook
+from product_classes import *
 from time import sleep
 from global_functions import *
-import os
 file_name = 'currys_logs.txt'
 
 
@@ -16,12 +14,18 @@ def get_product_title(soup):
         append_to_logs(file_name, f'{soup.prettify()}')
 
 
-def check_availability(titles, keyword):
-    for i, title in enumerate(titles):
-        if keyword in title:
-            return i, True
+def check_availability(title, keyword, soup):
+    if keyword in title:
+        try:
+            lis = soup.find('ul', {'data-product': 'availability'}).find_all('li')
+            for li in lis:
+                if li["class"][0] == "available":
+                    return True
+        except:
+            append_to_logs(file_name, f'Error finding ul {get_time()}\n')
+            append_to_logs(file_name, f'{soup}\n')
 
-    return None, False
+    return False
 
 
 def get_image_url(soup):
@@ -54,43 +58,35 @@ def get_link(soup):
 
 
 def main(url, keyword):
-    hasSent = False
-
     append_to_logs(file_name, f'Started monitor {get_time()}\n')
+    items = Products()
     while True:
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15'}
-
-        res = get_content(url, headers, file_name)
+        res = get_content(url, file_name, None)
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
+            
             products_list = soup.find('div', class_='col12 resultGrid').find_all('article')
             titles = []
             for product in products_list:
                 title = get_product_title(product)
                 titles.append(title.lower())
 
-            idx, isAvailable = check_availability(titles, keyword)
-            
-            if not isAvailable and hasSent:
-                hasSent = False
+            for i, title in enumerate(titles):
+                item = Product(title, products_list[i])
+                items.add_product(item)
 
-            if isAvailable and not hasSent:
-                new_soup = products_list[idx]
-                product_id = new_soup['id'].strip('product')
-                title = titles[idx]
-                append_to_logs(file_name, f'Found item in stock check discord {get_time()}\n')
-                hasSent = True
-                image_url = get_image_url(new_soup)
-                price = get_price(new_soup)
-                link = get_link(new_soup)
-                send_webhook(link, 'Currys: item in stock', title, image_url, price, product_id) 
-        
+            for item in items.products_list:
+                isAvailable = check_availability(item.title, keyword, item.code)
+                if isAvailable:
+                    new_soup = item.code
+                    item.set_id(new_soup['id'].strip('product'))
+                    item.set_image_url(get_image_url(new_soup))
+                    item.set_price(get_price(new_soup))
+                    item.set_url(get_link(new_soup))
+                    item.send_webhook('Currys')
+                    item.hasSent = True
+                    append_to_logs(file_name, f'Found item in stock check discord {get_time()}\n')
+                    sleep(0.2)
+                else:
+                    item.hasSent = False
         sleep(2)
-
-
-if __name__ == '__main__':
-    websites = get_info()[0]
-    _url = websites['currys_url']
-    keyword = websites['keyword']
-    main(_url, keyword)

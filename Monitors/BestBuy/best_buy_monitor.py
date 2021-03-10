@@ -57,7 +57,3 @@ def main(product_id):
             send_webhook(url, "Best buy: item in stock", title, image_url, price, product_id)
 
         sleep(2)
-
-
-if __name__ == '__main__':
-    main(6439402)
