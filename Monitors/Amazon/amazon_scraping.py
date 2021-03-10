@@ -68,8 +68,7 @@ def main(url, retail):
     append_to_logs(file_name, f'Monitor started {get_time()}\n')
 
     while True:
-        headers = Headers(os='win', headers=True).generate()
-        res = get_content(new_url, headers, file_name, None)
+        res = get_content(new_url, file_name, None)
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
             isAvailable = check_availability(soup)

@@ -45,12 +45,9 @@ def get_price(soup):
 def main(url):
     hasSent = False
     append_to_logs(file_name, f'Started monitor {get_time()}\n')
-
+    print(f'Started monitoring url {url} - {get_time()}')
     while True:
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15'}
-
-        res = get_content(url, headers, file_name)
+        res = get_content(url, file_name, None)
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
             isAvailable = check_availability(soup)
@@ -66,9 +63,3 @@ def main(url):
                 send_webhook(url, 'Argos: item in stock', title, image_url, price, id)
 
         sleep(2)
-
-
-if __name__ == '__main__':
-    websites = get_info()[0]
-    _url = websites['argos_console_url']
-    main(_url)

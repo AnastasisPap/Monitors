@@ -5,7 +5,7 @@ import threading
 
 
 def run_monitors():
-    urls = get_urls()
+    urls = get_urls('amazon_urls.csv')
     for url in urls:
         prod_url = url['url']
         price = url['retail']

@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime
 import requests
 from fake_headers import Headers
 import os
@@ -16,19 +16,15 @@ def get_time():
     return f'{str(datetime.now())}'
 
 
-def get_content(url, headers, file_name, proxies):
+def get_content(url, file_name, proxies):
     try:
+        headers = Headers(os='win', headers=True).generate()
         if not proxies:
             res = requests.get(url, headers=headers)
         else:
             res = requests.get(url, headers=headers, proxies=proxies)
         if res.status_code != 200:
             append_to_logs(file_name, f"Error, status code: {res.status_code} | {get_time()} | {url}\n")
-            while res.status_code == 503:
-                append_to_logs(file_name, "Header banned")
-                print('generating new header')
-                new_header = Headers(os='mac', headers=True).generate()
-                get_content(url, new_header, file_name, proxies)
         else:
             return res
     except:
