@@ -13,12 +13,12 @@ def append_to_logs(file_name, message):
 
 
 def get_time():
-    return f'{str(datetime.today())}'
+    return f'{str(datetime.now())}'
 
 
 def get_content(url, headers, file_name, proxies):
     try:
-        if proxies:
+        if not proxies:
             res = requests.get(url, headers=headers)
         else:
             res = requests.get(url, headers=headers, proxies=proxies)

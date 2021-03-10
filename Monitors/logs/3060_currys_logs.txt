@@ -1,0 +1,165 @@
+Started monitor 2021-03-05 12:55:34.227374
+Started monitor 2021-03-05 12:56:07.715632
+Started monitor 2021-03-05 12:57:15.398064
+Started monitor 2021-03-05 12:57:36.283588
+Started monitor 2021-03-05 12:57:49.799851
+Started monitor 2021-03-05 12:58:09.733852
+Started monitor 2021-03-05 12:58:19.085850
+Started monitor 2021-03-05 13:01:48.140739
+Started monitor 2021-03-05 13:02:33.566836
+Started monitor 2021-03-05 13:02:42.673278
+Started monitor 2021-03-05 13:03:13.950023
+Started monitor 2021-03-05 13:04:47.831765
+Started monitor 2021-03-05 13:05:04.762558
+Started monitor 2021-03-05 13:06:16.835851
+Started monitor 2021-03-05 13:07:50.418221
+Started monitor 2021-03-05 13:08:42.183282
+Started monitor 2021-03-05 13:09:40.227371
+Started monitor 2021-03-05 13:10:10.466196
+Started monitor 2021-03-05 13:10:18.544930
+Started monitor 2021-03-05 13:10:29.457865
+Started monitor 2021-03-05 13:11:24.363440
+Started monitor 2021-03-05 13:11:36.643250
+Started monitor 2021-03-05 13:12:50.199083
+Started monitor 2021-03-05 13:13:36.675850
+Started monitor 2021-03-05 13:13:52.171167
+Started monitor 2021-03-05 13:14:48.853835
+Started monitor 2021-03-05 13:15:11.510384
+Started monitor 2021-03-05 13:15:25.648056
+Started monitor 2021-03-05 13:17:56.499393
+Started monitor 2021-03-05 13:18:27.785610
+Started monitor 2021-03-05 13:18:46.276850
+Started monitor 2021-03-05 13:18:52.451486
+Started monitor 2021-03-05 13:19:01.503844
+Started monitor 2021-03-05 13:20:22.497779
+Started monitor 2021-03-05 13:23:49.241952
+Started monitor 2021-03-05 13:24:23.615544
+Started monitor 2021-03-05 13:24:34.417113
+Started monitor 2021-03-05 13:25:39.303911
+Started monitor 2021-03-05 13:26:08.356735
+Started monitor 2021-03-05 13:27:24.114504
+Started monitor 2021-03-05 13:27:28.850447
+Started monitor 2021-03-05 13:27:58.837821
+Started monitor 2021-03-05 13:29:42.237046
+Started monitor 2021-03-05 13:29:51.243140
+Started monitor 2021-03-05 13:30:08.642852
+Started monitor 2021-03-05 13:30:24.824147
+Started monitor 2021-03-05 13:31:23.937860
+Started monitor 2021-03-05 13:31:34.683819
+Started monitor 2021-03-05 13:31:45.825677
+Started monitor 2021-03-05 13:33:02.249976
+Started monitor 2021-03-05 13:33:20.231440
+Started monitor 2021-03-05 13:38:56.292970
+Error finding image url 2021-03-05 13:39:00.630788
+<article class="product result-prd productCompare clearfix" id="product10145440">
+ <div class="productWrapper">
+  <header class="productTitle">
+   <a href="https://www.currys.co.uk/gbuk/tv-and-home-entertainment/dvd-blu-ray-and-home-cinema/home-cinema-systems-and-sound-bars/sony-ht-rt3-5-1-sound-bar-10145440-pdt.html">
+    <span data-product="brand">
+     SONY
+    </span>
+    <span data-product="name">
+     HT-RT3 5.1 Sound Bar
+    </span>
+   </a>
+  </header>
+  <div class="productListContainer">
+   <div class="productListImage">
+    <a class="imgC" href="https://www.currys.co.uk/gbuk/tv-and-home-entertainment/dvd-blu-ray-and-home-cinema/home-cinema-systems-and-sound-bars/sony-ht-rt3-5-1-sound-bar-10145440-pdt.html">
+     <div class="product-images">
+      <picture class="lozadImage" data-alt="HT-RT3 5.1 Sound Bar" data-iesrc="https://brain-images-ssl.cdn.dixons.com/0/4/10145440/g_10145440.jpg" style="display: block; min-height: 100%">
+       <source srcset="https://brain-images-ssl.cdn.dixons.com/0/4/10145440/g_10145440.jpg"/>
+      </picture>
+     </div>
+    </a>
+    <a class="clickableArea" href="https://www.currys.co.uk/gbuk/tv-and-home-entertainment/dvd-blu-ray-and-home-cinema/home-cinema-systems-and-sound-bars/sony-ht-rt3-5-1-sound-bar-10145440-pdt.html">
+    </a>
+   </div>
+   <div class="desc">
+    <a href="https://www.currys.co.uk/gbuk/tv-and-home-entertainment/dvd-blu-ray-and-home-cinema/home-cinema-systems-and-sound-bars/sony-ht-rt3-5-1-sound-bar-10145440-pdt.html">
+     <div class="in">
+      <ul class="productDescription">
+       <li>
+        600 W with dialogue enhancement
+       </li>
+       <li>
+        Wired subwoofer
+       </li>
+       <li>
+        Bluetooth / NFC
+       </li>
+       <li>
+        HDMI / Optical
+       </li>
+      </ul>
+      <div data-component="avms" data-productid="10145440">
+      </div>
+      <div class="reevoo-placeholder">
+       <span class="reevoo-score score-8">
+       </span>
+       <small>
+        (377)
+       </small>
+      </div>
+      <div class="product-desc" data-component="product-desc">
+       <div class="product-desc-toggle-closed">
+        <i class="dcg-icon-caret-right">
+        </i>
+        <span class="product-desc-toggle-title">
+         Brief product description
+        </span>
+       </div>
+       <div class="product-desc-toggle-opened" style="display: none;">
+        <i class="dcg-icon-caret-down">
+        </i>
+        <span class="product-desc-toggle-title">
+         Close
+        </span>
+       </div>
+      </div>
+     </div>
+    </a>
+   </div>
+  </div>
+ </div>
+ <div class="productPrices">
+  <div class="amounts" data-productid="10145440">
+   <div class="main-amount center border-t border-b">
+    <strong class="price" data-product="price">
+     £229.00
+    </strong>
+   </div>
+   <div class="past-amount desktop">
+   </div>
+  </div>
+  <div class="online-credit-message" data-credit-available="">
+   Flexible credit available
+  </div>
+  <div class="channels-availability">
+   <ul class="simple prd-channels" data-product="availability">
+    <li class="available" data-availability="homeDeliveryAvailable">
+     <i class="dcg-icon-tick">
+     </i>
+     FREE delivery available
+    </li>
+    <li class="available" data-availability="collectInStoreAvailable">
+     <i class="dcg-icon-tick">
+     </i>
+     FREE collection from store
+    </li>
+   </ul>
+  </div>
+  <div data-component="compare-checkbox" data-productid="10145440">
+  </div>
+ </div>
+ <div class="product-desc-wrapper" style="display: none;">
+  <span class="product-desc-arrow">
+  </span>
+  <span class="product-desc-text">
+   Add immersive audio to your home entertainment setup with the Sony HT-RT3 5.1 Sound Bar with wired subwoofer and two rear speakers.Surround soundThe HTRT3 allows you to enjoy 5.1 channel surround sound for an excellent audio experience. The...
+  </span>
+  <a class="product-desc-link" href="https://www.currys.co.uk/gbuk/tv-and-home-entertainment/dvd-blu-ray-and-home-cinema/home-cinema-systems-and-sound-bars/sony-ht-rt3-5-1-sound-bar-10145440-pdt.html">
+   Find out more
+  </a>
+ </div>
+</article>
