@@ -1,4 +1,3 @@
-from read_csv import get_info
 from send_webhook import send_webhook
 from time import sleep
 import requests
@@ -58,7 +57,3 @@ def main(product_id):
             send_webhook(url, "Target: item in stock", title, image_url, price, product_id)
 
         sleep(2)
-
-
-if __name__ == '__main__':
-    main(81114474)

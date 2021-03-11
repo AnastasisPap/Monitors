@@ -112,4 +112,5 @@ def main(url):
         sleep(2)
 
 
-main('https://www.newegg.com/p/pl?N=100007709%20601357282&PageSize=96')
+if __name__ == '__main__':
+    main('https://www.newegg.com/p/pl?N=100007709%20601357282&PageSize=96')
