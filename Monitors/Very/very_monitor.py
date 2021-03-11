@@ -59,7 +59,6 @@ def main(url, item_id):
     items = Products()
     while True:
         res = get_content(url, file_name, None)
-        
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
             try:
@@ -88,7 +87,7 @@ def main(url, item_id):
                     else:
                         item.hasSent = False
             except:
-                append_to_logs(file_name, f'Error finding products {get_time()}\n{soup}\n')
+                append_to_logs(file_name, f'Error finding products {get_time()}\n')
 
         sleep(2)
 
