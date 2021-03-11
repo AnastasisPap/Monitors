@@ -1,77 +1,97 @@
 from bs4 import BeautifulSoup
-from read_csv import get_info
-from send_webhook import send_webhook
 from time import sleep
 from global_functions import *
+from product_classes import *
 file_name = 'very_logs.txt'
 
 
-def check_availability(soup):
+def check_availability(soup, item_id):
     try:
-        oos_text = soup.find('meta', {'property': 'product:availability'})["content"]
-        if oos_text == 'Out of stock' or oos_text == 'preorder':
-            return False
-        return True
+        curr_id = soup['data-sdg-id']
+        if curr_id in item_id:
+            return True
+        return False
     except:
-        append_to_logs(file_name, f'Error finding availability {get_time()}\n')
-        append_to_logs(file_name, f'{soup.prettify()}')
+        append_to_logs(file_name, f'Error finding item id {get_time()}\n {soup}\n')
+        return False
+
+
+def get_ids(soup):
+    ids = []
+    for item in soup:
+        ids.append(item['data-sdg-id'])
+
+    return ids
+
+
+def get_title_url(soup):
+    try:
+        details = soup.find('a', class_='productTitle')
+        url = details['href']
+        title = details.find('span').text.replace("\n", "")
+        return title, url
+
+    except:
+        append_to_logs(file_name, f'Error finding title {get_time()}\n {soup}\n')
+        return 'Error finding title'
+
+
+def get_image_url(soup):
+    try:
+        image_url = soup.find('a', class_='productMainImage').find('img')['src']
+        return image_url
+    except:
+        append_to_logs(file_name, f'Error finding image url {get_time()}\n {soup}\n')
+        return 'https://www.metrorollerdoors.com.au/wp-content/uploads/2018/02/unavailable-image-300x225.jpg'
 
 
 def get_price(soup):
     try:
-        price = soup.find('meta', {'property': 'product:price:amount'})["content"]
-        return '£' + price
+        price = soup.find('a', class_='productPrice').text.replace('\n', '').replace(' ', '')
+        return price
     except:
-        append_to_logs(file_name, f'Error finding price {get_time()}\n')
-        append_to_logs(file_name, f'{soup.prettify()}')
+        append_to_logs(file_name, f'Error finding price {get_time()}\n {soup}')
+        return 'None'
 
 
-def get_url(soup):
-    try:
-        url = soup.find('meta', {'property': 'og:url'})
-        return url
-    except:
-        append_to_logs(file_name, f'Error finding url {get_time()}\n')
-        append_to_logs(file_name, f'{soup.prettify()}')
-
-
-def get_title_image_url(soup):
-    try:
-        image_div = soup.find(id='amp-originalImage').find('img')
-        image_url = image_div["src"]
-        title = image_div["title"].split("-")
-        title = ' '.join(title)
-        return title, image_url
-    except:
-        append_to_logs(file_name, f'Error finding image url {get_time()}\n')
-        append_to_logs(file_name, f'{soup.prettify()}')
-
-
-def main(url):
-    hasSent = False
-
+def main(url, item_id):
     append_to_logs(file_name, f'Started monitor {get_time()}\n')
+    items = Products()
     while True:
-        headers = {'Accept': '*/*', 'Connection': 'keep-alive', 'User-Agent': 'Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36', 'Accept-Language': 'en-US;q=0.5,en;q=0.3', 'Cache-Control': 'max-age=0', 'DNT': '1', 'Pragma': 'no-cache'}
-        res = get_content(url, headers, file_name)
+        res = get_content(url, file_name, None)
         
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
-            isAvailable = check_availability(soup)
-            if not isAvailable and hasSent:
-                hasSent = False
+            try:
+                products_list = soup.find('ul', class_='productList').find_all('li', class_='product')
+                ids = get_ids(products_list)
 
-            if isAvailable and not hasSent:
-                title, image_url = get_title_image_url(soup)
-                price = get_price(soup)
-                product_id = url.split('/')[-1].strip('.prd')
-                send_webhook(url, "Very: item in stock", title, image_url, price, product_id)
-                hasSent = True
+                for i, prod_id in enumerate(ids):
+                    item = Product(prod_id, products_list[i])
+                    items.add_product(item)
+
+                for item in items.products_list:
+                    isAvailable = check_availability(item.code, item_id)
+
+                    if isAvailable:
+                        new_soup = item.code
+                        title, url = get_title_url(new_soup)
+                        item.set_title(title)
+                        item.set_image_url(get_image_url(new_soup))
+                        item.set_price(get_price(new_soup))
+                        item.set_url(url)
+                        item.set_sku(item_id)
+                        item.send_webhook('Very UK')
+                        item.hasSent = True
+                        append_to_logs(file_name, f'Found item in stock check discord {get_time()}\n')
+                        sleep(0.5)
+                    else:
+                        item.hasSent = False
+            except:
+                append_to_logs(file_name, f'Error finding products {get_time()}\n{soup}\n')
 
         sleep(2)
 
 
 if __name__ == '__main__':
-    websites = get_info()[0]
-    _url = websites['very_url']
-    main(_url)
+    main('https://www.very.co.uk/e/q/playstation-5-console.end?_requestid=108264', '1600104783')
