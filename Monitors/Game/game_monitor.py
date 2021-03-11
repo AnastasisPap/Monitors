@@ -42,7 +42,7 @@ def check_availability(url):
 def main(url):
     hasSent = False
     hasSentURL = False
-    append_to_logs(file_name, f'Monitor started {get_time()}\n')
+    append_to_logs(file_name, f'Monitor started with url {url} - {get_time()}\n')
 
     while True:
         isAvailable, res = check_availability(url)
@@ -63,8 +63,3 @@ def main(url):
                 sleep(0.5)
 
         sleep(2)
-
-
-if __name__ == '__main__':
-    _url = 'https://www.game.co.uk/en/hardware/playstation-5?sortBy=PRICE_DESC&inStockOnly=false&cm_sp=Nav-_-PlayStation-_-PS5-_-Consoles'
-    main(_url)
