@@ -1,12 +1,8 @@
 from bs4 import BeautifulSoup
-from read_csv import get_info
-from send_webhook import send_webhook
 from time import sleep
 from global_functions import *
+from product_classes import *
 file_name = 'new_egg_logs.txt'
-products_dict = {}
-# get_image_url
-# get_url
 
 
 def check_availability(product):
@@ -27,6 +23,7 @@ def get_title(product):
     except:
         append_to_logs(file_name, f'Error finding title {get_time()}\n')
         append_to_logs(file_name, f'{product.prettify()}')
+        return 'Error getting title'
 
 
 def get_price(product):
@@ -36,6 +33,7 @@ def get_price(product):
     except:
         append_to_logs(file_name, f'Error finding price {get_time()}\n')
         append_to_logs(file_name, f'{product.prettify()}\n')
+        return 'Error finding price'
 
 
 def get_image_url(product):
@@ -45,45 +43,7 @@ def get_image_url(product):
     except:
         append_to_logs(file_name, f'Error finding image url {get_time()}\n')
         append_to_logs(file_name, f'{product.prettify()}\n')
-
-
-def get_id(product):
-    try:
-        item_features = product.find('ul', class_='item-features').find_all('li')
-        product_id = item_features[-2].text.strip("Item #: ").strip("Model #:")
-        return product_id
-    except:
-        append_to_logs(file_name, f'Error finding id {get_time()}\n')
-        append_to_logs(file_name, f'{product.prettify()}\n')
-
-
-def products_scraping(soup):
-    try:
-        products = soup.find_all('div', class_='item-cell')
-        products = [product for product in products if product.has_attr('id')]
-        for product in products:
-            isAvailable = check_availability(product)
-
-            if isAvailable:
-                title, url = get_title(product)
-                price = get_price(product)
-                if url in products_dict:
-                    if products_dict[url] == 0:
-                        products_dict[url] = 300
-                    else:
-                        products_dict[url] -= 1
-                else:
-                    products_dict[url] = 300
-                image_url = get_image_url(product)
-                product_id = get_id(product)
-                if products_dict[url] == 300:
-                    append_to_logs(file_name, f'Found item in stock {get_time()}\n')
-                    send_webhook(url, 'NewEgg: item in stock', title, image_url, price, product_id)
-                    sleep(0.5)
-
-    except:
-        append_to_logs(file_name, f'Error finding products list {get_time()}\n')
-        append_to_logs(file_name, f'{soup.prettify()}')
+        return 'https://www.metrorollerdoors.com.au/wp-content/uploads/2018/02/unavailable-image-300x225.jpg'
 
 
 def has_items(soup):
@@ -95,20 +55,65 @@ def has_items(soup):
         return True
 
 
+def get_sku(soup):
+    try:
+        item_features = soup.find('ul', class_='item-features').find_all('li')
+        sku = item_features[-2].text.strip("Item #:")
+        return sku
+    except:
+        append_to_logs(file_name, f'Error finding sku {get_time()}\n{soup.prettify()}\n')
+        return 'None'
+
+
+def get_ids(soup):
+    ids = []
+
+    for product in soup:
+        ids.append(product['id'])
+    return ids
+
+
 def main(url):
     append_to_logs(file_name, f'Started monitor {get_time()}\n')
+    items = Products()
     while True:
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15'}
-        res = get_content(url, headers, file_name)
+        res = get_content(url, file_name, None)
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
             products_res = has_items(soup)
             if products_res:
-                products_scraping(soup)
+                try:
+                    products_list = soup.find_all('div', class_='item-cell')
+                    products_list = [product for product in products_list if product.has_attr('id')]
+                    ids = get_ids(products_list)
+
+                    for i, prod_id in enumerate(ids):
+                        item = Product(prod_id, products_list[i])
+                        items.add_product(item)
+
+                    for item in items.products_list:
+                        isAvailable = check_availability(item.code)
+                        isAvailable = True
+                        if isAvailable:
+                            new_soup = item.code
+                            title, url = get_title(new_soup)
+                            item.set_title(title)
+                            item.set_image_url(get_image_url(new_soup))
+                            item.set_price(get_price(new_soup))
+                            item.set_url(url)
+                            item.set_sku(get_sku(new_soup))
+                            item.send_webhook('New Egg')
+                            item.hasSent = True
+                            append_to_logs(file_name, f'Found item in stock, check discord {get_time()}\n')
+                            sleep(0.5)
+                        else:
+                            item.hasSent = False
+
+                        break
+
+                except:
+                    append_to_logs(file_name, f'Error finding item cells {get_time()}\n{soup}')
         sleep(2)
 
 
-if __name__ == '__main__':
-    _3060_url = 'https://www.newegg.com/p/pl?Submit=Property&Subcategory=48&N=100007709%20601361654%208000&IsPowerSearch=1'
-    main(_3060_url)
+main('https://www.newegg.com/p/pl?N=100007709%20601357282&PageSize=96')
