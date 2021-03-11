@@ -93,7 +93,6 @@ def main(url):
 
                     for item in items.products_list:
                         isAvailable = check_availability(item.code)
-                        isAvailable = True
                         if isAvailable:
                             new_soup = item.code
                             title, url = get_title(new_soup)
@@ -108,9 +107,6 @@ def main(url):
                             sleep(0.5)
                         else:
                             item.hasSent = False
-
-                        break
-
                 except:
                     append_to_logs(file_name, f'Error finding item cells {get_time()}\n{soup}')
         sleep(2)
