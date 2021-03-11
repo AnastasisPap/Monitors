@@ -7,7 +7,7 @@ file_name = 'currys_logs.txt'
 
 def get_product_title(soup):
     try:
-        title_div = soup.find('div', class_='desc').find('span', {"data-product": "name"})
+        title_div = soup.find('span', {"data-product": "name"})
         return title_div.text
     except:
         append_to_logs(file_name, f'Error finding product title {get_time()}\n')
@@ -58,14 +58,16 @@ def get_link(soup):
 
 
 def main(url, keyword):
-    append_to_logs(file_name, f'Started monitor {get_time()}\n')
+    append_to_logs(file_name, f'Started monitor with url {url} - {get_time()}\n')
     items = Products()
     while True:
         res = get_content(url, file_name, None)
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
-            
-            products_list = soup.find('div', class_='col12 resultGrid').find_all('article')
+            try:
+                products_list = soup.find('div', class_='col12 resultGrid').find_all('article')
+            except:
+                products_list = soup.find('div', class_='col12 resultList').find_all('article')
             titles = []
             for product in products_list:
                 title = get_product_title(product)

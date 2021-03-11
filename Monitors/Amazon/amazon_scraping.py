@@ -65,7 +65,7 @@ def get_image_url(soup):
 def main(url, retail):
     new_url, sku = get_new_url(url)
     hasSent = False
-    append_to_logs(file_name, f'Monitor started {get_time()}\n')
+    append_to_logs(file_name, f'Monitor started with url {url} - {get_time()}\n')
 
     while True:
         res = get_content(new_url, file_name, None)
