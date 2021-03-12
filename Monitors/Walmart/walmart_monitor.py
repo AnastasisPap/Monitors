@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-from read_csv import get_info
 from send_webhook import send_webhook
 from time import sleep
 from global_functions import *
@@ -47,19 +46,14 @@ def main(url):
     append_to_logs(file_name, f'Started monitor {get_time()}\n')
 
     while True:
-        headers = {'Accept': '*/*', 'Connection': 'keep-alive',
-                   'User-Agent': 'Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36',
-                   'Accept-Language': 'en-US;q=0.5,en;q=0.3', 'Cache-Control': 'max-age=0', 'DNT': '1',
-                   'Pragma': 'no-cache'}
-        proxies = {'https': 'proxy.endproxies.com:31112'}
-        res = get_content(url, headers, file_name, proxies)
+        res = get_content(url, file_name, None)
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
             isAvailable = check_availability(soup)
-            print(soup)
             if not isAvailable and hasSent:
                 hasSent = False
 
+            print(soup.prettify())
             if isAvailable and not hasSent:
                 title = get_title(soup)
                 price = get_price(soup)
@@ -72,4 +66,4 @@ def main(url):
 
 if __name__ == "__main__":
     _url = 'https://www.walmart.com/ip/PlayStation-5-Console/363472942'
-    main(_url)
+    main('https://www.walmart.com/ip/VIZIO-50-Class-4K-UHD-LED-SmartCast-Smart-TV-V-Series-V505-G-H/449340109')
