@@ -66,6 +66,3 @@ def main(url):
             except:
                 append_to_logs(file_name, f'Error finding products {get_time()}')
         sleep(2)
-
-
-main('https://www.gamestop.com/video-games/pc-gaming/components/graphics-cards')

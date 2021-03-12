@@ -50,10 +50,10 @@ def main(url):
         if res:
             soup = BeautifulSoup(res.content, 'html.parser')
             isAvailable = check_availability(soup)
+
             if not isAvailable and hasSent:
                 hasSent = False
 
-            print(soup.prettify())
             if isAvailable and not hasSent:
                 title = get_title(soup)
                 price = get_price(soup)
@@ -62,8 +62,3 @@ def main(url):
                 send_webhook(url, 'Walmart: item in stock', title, image_url, price, product_id)
                 hasSent = True
         sleep(2)
-
-
-if __name__ == "__main__":
-    _url = 'https://www.walmart.com/ip/PlayStation-5-Console/363472942'
-    main('https://www.walmart.com/ip/VIZIO-50-Class-4K-UHD-LED-SmartCast-Smart-TV-V-Series-V505-G-H/449340109')
